@@ -84,17 +84,36 @@ void printerror(char* error, int toclose)
 		exit(0);
 }
 
+//To get current time
+char* get_curr_time () 
+{
+	char* s = (char*) malloc (sizeof(char)*20);
+	int r;
+	struct timeval tv;
+	struct tm* tptr;
+	time_t c;
+	c= time(NULL);
+	tptr = localtime(&c);
+	gettimeofday(&tv, NULL);
+	r = strftime(s, 20, "%H:%M:%S", tptr);
+	char m[8];
+	sprintf(m, ".%06ld", tv.tv_usec);
+	strcat(s, m);
+	return s;
+}
+
 //Trace
 
 void trace(packet pkt)
 {
-	if(pkt.packettype == data)
+    char * timer = get_curr_time();
+    if(pkt.packettype == 2)
 	{
-		printf("\nRCVD PACKET: Sequence Number %d of Size %d Bytes from Relay %d\n", pkt.seq, pkt.size, (pkt.channel==0?2:1));
+		printf("%20s %20s %20s %20s %20d %20s %20s\n", "SERVER", "R", timer, "DATA", pkt.seq, (pkt.channel == 0?"RELAY 2":"RELAY 1"), "SERVER");
 	}
 	else
 	{
-		printf("\nSENT ACK for packet with Sequence Number %d of Size %d Bytes from Relay %d \n", pkt.seq, pkt.size, (pkt.channel==0?2:1));
+		printf("%20s %20s %20s %20s %20d %20s %20s\n", "SERVER", "S", timer, "ACK", pkt.seq, "SERVER", (pkt.channel==0?"RELAY 2":"RELAY 1"));
 	}
 }
 

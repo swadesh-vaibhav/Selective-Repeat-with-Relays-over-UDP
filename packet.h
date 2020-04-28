@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/time.h>
 #include <stdbool.h>
 
 #define PACKET_SIZE 100		//bytes
